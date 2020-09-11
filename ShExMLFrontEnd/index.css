@@ -1,0 +1,28 @@
+#mainContainer h2 {
+    color: white;
+}
+
+#mainContainer p {
+    color: white;
+}
+
+body {
+    background-color: #343A40;
+}
+
+#content {
+    min-height: 100vh;
+}
+
+#subtitle {
+    max-width: 500px;
+    text-align: center;
+}
+
+#buttons a {
+    margin: 2px;
+}
+
+#mainContent {
+    padding-top: 7em;
+}
