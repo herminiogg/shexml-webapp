@@ -4,14 +4,14 @@
     <meta charset='utf-8'>
     <title>Shape Expressions Mapping Language (ShExML)</title>
     <script 
-     src='https://www.w3.org/Tools/respec/respec-w3c-common' 
+     src='https://www.w3.org/Tools/respec/respec-w3c' 
      class='remove'></script>
     <script class='remove'>
       var respecConfig = {
         specStatus: "unofficial",
         editors: [{
           name: "Herminio García-González",
-          url: "http://herminiogarcia.com",
+          url: "https://herminiogarcia.com",
           company: "University of Oviedo",
           companyURL: "http://www.uniovi.es",
           mailto: "herminiogg@gmail.com"
@@ -23,6 +23,11 @@
                 title: "Shape Expressions Language 2.1",
                 href: "http://shex.io/shex-semantics/",
                 status: "CG-DRAFT"
+            },
+            "RDFDatasets": {
+                title: "RDF 1.1: On Semantics of RDF Datasets",
+                href: "https://www.w3.org/TR/rdf11-datasets/",
+                status: "W3C Working Group Note"
             }
         }
       };
@@ -45,8 +50,8 @@
     <section>
         <h2>Introduction</h2>
         <p>
-            A ShExML script can be divided in two main blocks: declarations and shapes. The declarations part allows the users to define some
-            variables that will be used later in other declarations and in the shapes. The shapes, by its side, are the way for defining the
+            A ShExML script can be divided in two main blocks: declarations and generatos. The declarations part allows the users to define some
+            variables that will be used later in other declarations and in generators. The generators, by its side, are the way for defining the
             pattern of the output. 
         </p>
         <p>
@@ -57,8 +62,10 @@
             how to merge or transform the obtained values.
         </p>
         <p>
+            Generators are divided in graphs and shapes (generation of quads and triples respectively).
             A shape is conformed by a shape name (variable to refer to it), the subject expression to generate the different subjects and a set of terminal and object expressions
             to generate the triples for the various entities. For more information about how shapes are conceived please refer to ShEx specification [[SHEX]].
+            A graph is conformed by a graph name and various shapes. The graph name will be used to give a name to the generated named graph.
         </p>
     </section>
     <section>
@@ -94,7 +101,7 @@ EXPRESSION films &lt;films_xml_file.film_xml UNION films_json_file.film_json&gt;
             </pre>
         </aside>
         <p>
-            As previously stated, a ShExML script can be divided in two main parts: declarations and shapes. 
+            As previously stated, a ShExML script can be divided in two main parts: declarations and generators. 
         </p>
         <p>
             In the declarations part a prefix is defined which is the ':' prefix for the example URI. This prefix will be used later in the shape
@@ -103,7 +110,7 @@ EXPRESSION films &lt;films_xml_file.film_xml UNION films_json_file.film_json&gt;
             two iterators is defined which allows to combine its fields results.
         </p>
         <p>
-            In the shapes part, a shape is defined to specify the form of the output data. The :Films shape obtains its subjects from the films.ids expression (note that this
+            In the generators part, a shape is defined to specify the form of the output data. The :Films shape obtains its subjects from the films.ids expression (note that this
             is possible because the union of two iterators has been made; therefore, it is possible to extract the values with the '.' accessor).
             Then, four tuples of predicate and object are defined. Each of these tuples defines a predicate (in the form of prefix + name) and an object which will
             be, normally, an expression. Therefore, triples will be created in the form of subject, predicate and object.
@@ -139,12 +146,33 @@ SOURCE xml_file &lt;https://example.com/file.xml&gt;
 SOURCE json_file &lt;file:///example/path/to/file/file.json&gt;
                 </pre>
             </aside>
+            <section>
+                <h3>Types of allowed sources</h3>
+                <p>
+                    ShExML is conceived with the mission to process many different formats. Therefore many formats are allowed and more are planned to be added in the future. Nowadays, the following ones are fully supported:
+                    <ul>
+                        <li>JSON</li>
+                        <li>XML</li>
+                        <li>CSV</li>
+                        <li>Relational Databases (using SQL)</li>
+                    </ul>
+                </p>
+            </section>
+            <section>
+            <h3>Wilcards</h3>
+                <p>In order to allow conversion of multiple files the "*" wildcard is allowed and can be used as shown in the following example. So, example*.xml will match all xml files beginning with the word "example".</p>
+                <aside class="example" title="Source wildcard example">
+                    <pre>
+    SOURCE xml_file &lt;/path/to/example*.xml&gt;
+                    </pre>
+                </aside>
+            </section>
         </section>
         <section>
             <h2>Iterator</h2>
             <p>
                 An iterator is used whenever there is a data structure that can be repeated along the file. Therefore, a query is defined to specify where
-                the iterator must iterate. The iterator accepts XPath and JSONPath queries which must be identified with the 'xpath:' or 'jsonpath:' keyword
+                the iterator must iterate. The iterator accepts XPath, JSONPath and SQL queries which must be identified with the 'xpath:', 'jsonpath:' or 'sql:' keyword
                 before its definition. In the example below there is the definition of an Iterator for XPath and for JSONPath. In the following subsections the elements that 
                 can be nested inside the iterators are described. The '{' and '}' symbols are used to open and close the block of nested content respectively.
             </p>
@@ -155,12 +183,23 @@ ITERATOR example &lt;jsonpath: $.path.to.entity[*]&gt; { }
                 </pre>
             </aside>
             <section>
+                <h3>Iterator types</h3>
+                <p>The following iterators and their keywords are now available in ShExML. One for each format type available.
+                    <ul>
+                        <li><strong>xpath:</strong> (XPath query for XML files)</li>
+                        <li><strong>jsonpath:</strong> (JSONPath query for JSON files)</li>
+                        <li><strong>csvperrow</strong> (CSV iterator row by row)</li>
+                        <li><strong>sql:</strong> (SQL query with a table of results, to be iterated row by row)</li>
+                    </ul>
+                </p>
+            </section>
+            <section>
                 <h2>Field</h2>
                 <p>
                     A field is a partial query defined from the base of an iterator query. Once the result of the iterator query is iterated, the partial query can be applied
                     to obtain the field value or values. It is important to remark that it is possible to return not only one result but more than one. That is, if the result is
                     a list of results, that will be reflected on the output. The partial query can be defined as a normal XPath or JSONPath query but ommiting the first '/' or '.'
-                    navigational symbols because they are attached by the engine. Therefore, an example iterator with fields is presented below.
+                    navigational symbols because they are attached by the engine. In the case of CSV or Relational databases results field are the names of the columns that want to be retrieved. Therefore, an example iterator with fields is presented below.
                     <aside class="example" title="Field example">
                         <pre>
 ITERATOR example &lt;xpath: /path/to/entity&gt; {
@@ -393,137 +432,175 @@ EXPRESSION exp &lt;file.it1.field2 + "-" + file.it2.field3&gt;
                     possible occurrences in different languages are matched to Asturias as it appears in the URI http://dbpedia.org/resource/Asturias. In the shapes
                     section an example of use will be showed.
                 </p>
-                <aside class="example" title="String operation over fields example">
+                <aside class="example" title="Matcher example">
                     <pre>
 MATCHER ast &lt;Principality of Asturias, Principado de Asturias, Principáu d'Asturies, Asturies AS Asturias&gt;
+                    </pre>
+                </aside>
+                <section>
+                    <h3>Multiple entry Matcher</h3>
+                    <p>As a way to avoid defining multiple matchers for different terms it is possible to group them in a single matcher using the "&" operator. Therefore, using the previous example including another entry will look like:</p>
+                    <aside class="example" title="Matcher example">
+                        <pre>
+    MATCHER regions &lt;Principality of Asturias, Principado de Asturias, Principáu d'Asturies, Asturies AS Asturias &
+                    Spain, España, Espagne AS Spain&gt;
+                        </pre>
+                    </aside>
+                </section>
+            </section>
+            <section>
+                <h2>Autoincrement ids</h2>
+                <p>When there are no natural ids present in the content it can be useful to build your own ones, like autoincremental ids on databases. Therefore in ShExML AUTOINCREMENT keyword allows to define an autoincremental id to be used as subjects in triples. It is defined as the concatenetion of a beginning string (optional), a range definition (mandatory) and an ending string (optional). Range definition is specified as beginning integer (mandatory), an ending range integer (using to keyword and optional, default to infinite) and a step incremental string (using by keyword and optional, default to 1). Therefore, in the following example we define an id which will generate ids: my0Id, my2Id, my4Id, my6Id, my8Id, my10Id.</p>
+                <aside class="example" title="Autoincrement id example">
+                    <pre>
+AUTOINCREMENT myId &lt;"my" + 0 to 10 by 2 + "Id"&gt;
                     </pre>
                 </aside>
             </section>
         </section>
     </section>
     <section>
-        <h2>Shapes</h2>
-        <p>
-            Shapes are the way to define the form of the output data. Shape concept is taken from ShEx and in this specification only basic notions of shapes are
-            explained—those notions needed for the understanding of ShExML—so we encourage people who want a further reading to go to ShEx specification [[SHEX]].
-        </p>
+        <h2>Generators</h2>
         <section>
-            <h2>Shapes in ShExML</h2>
+            <h2>Shapes</h2>
             <p>
-                Shapes in ShExML are similar to those in ShEx but with some modifications. As showed in the example, a shape is conformed by: the shape name which
-                can take a prefix to define its namespace; the expression for generating the subjects of the triple which is enclosed between square brackets and
-                preceded by the prefix name; and a set of predicate and object tuples. Each of these tuples contain: a predicate in the form of prefix plus 
-                terminal (like in Turtle) and the object which is an expression enclosed between square brackets and with an optional prefix. In the absence
-                of the optional prefix a literal will be generated and an URI if the prefix is present.
+                Shapes are the way to define the form of the output data. Shape concept is taken from ShEx and in this specification only basic notions of shapes are
+                explained—those notions needed for the understanding of ShExML—so we encourage people who want a further reading to go to ShEx specification [[SHEX]].
             </p>
-            <aside class="example" title="Shape example">
-                <pre>
-ITERATOR film_xml &lt;xpath: //film&gt; {
-    FIELD id &lt;@id&gt;
-    FIELD name &lt;name&gt;
-    FIELD year &lt;year&gt;
-    FIELD country &lt;country&gt;
-    FIELD directors &lt;directors/director&gt;
-}
-ITERATOR film_json &lt;jsonpath: $.films[*]&gt; {
-    FIELD id &lt;id&gt;
-    FIELD name &lt;name&gt;
-    FIELD year &lt;year&gt;
-    FIELD country &lt;country&gt;
-    FIELD directors &lt;director&gt;
-}
-EXPRESSION films &lt;films_xml_file.film_xml UNION films_json_file.film_json&gt;
-
-:Films :[films.id] {
-    :name [films.name] ;
-    :year :[films.year] ;
-    :country [films.country] ;
-    :director [films.directors] ;
-}
-                </pre>
-            </aside>
-            <p>
-                In the example above, which is extracted from the first example of this specification, we are defining two iterators that then are merged
-                using the union expression. Then, we define a shape called ':Films' whose subjects are extracted from the union films taking the id attribute.
-                The id attribute is the union of the id fields of both iterators as we have explained earlier. Then 4 tuples of predicate and object are
-                defined. These tuples will generate the different triples as they constitute the basic subject predicate object structure of the RDF triples.
-                Notice that when a ':' is used before an expression, like in films.year, a URI will be generated taking into account the prefix given.
-                In the example below, the same transformation is done but using field expressions instead of iterator expressions.
-            </p>
-            <aside class="example" title="Shape example">
-                <pre>
-ITERATOR film_xml &lt;xpath: //film&gt; {
-    FIELD id &lt;@id&gt;
-    FIELD name &lt;name&gt;
-    FIELD year &lt;year&gt;
-    FIELD country &lt;country&gt;
-    FIELD directors &lt;directors/director&gt;
-}
-ITERATOR film_json &lt;jsonpath: $.films[*]&gt; {
-    FIELD id &lt;id&gt;
-    FIELD name &lt;name&gt;
-    FIELD year &lt;year&gt;
-    FIELD country &lt;country&gt;
-    FIELD directors &lt;director&gt;
-}
-EXPRESSION films_ids &lt;films_xml_file.film_xml.id UNION films_json_file.film_json.id&gt;
-EXPRESSION films_names &lt;films_xml_file.film_xml.name UNION films_json_file.film_json.name&gt;
-EXPRESSION films_years &lt;films_xml_file.film_xml.year UNION films_json_file.film_json.year&gt;
-EXPRESSION films_countries &lt;films_xml_file.film_xml.country UNION films_json_file.film_json.country&gt;
-EXPRESSION films_directors &lt;films_xml_file.film_xml.directors UNION films_json_file.film_json.directors&gt;
-
-:Films :[films_ids] {
-    :name [films_names] ;
-    :year :[films_years] ;
-    :country [films_countries] ;
-    :director [films_directors] ;
-}
-                </pre>
-            </aside>
-        </section>
-        <section>
-            <h2>Linking shapes</h2>
-            <p>
-                There are occasions when a type has some nested subtypes. In ShEx, it is possible linking shapes to say that an object has to
-                comply with a certain shape. In ShExML, this will trigger the generation of the new entity and they will be linked in RDF using
-                the subject of the nested entity. In the example below an :Actor shape is linked to :Films shape.
-            </p>
-            <aside class="example" title="Shape example">
-                <pre>
-:Films :[films.id] {
-    :name [films.name] ;
-    :year :[films.year] ;
-    :country [films.country] ;
-    :director [films.directors] ;
-    :cast @:Actor ;
-}
-
-:Actor :[films.actors.id] {
-    :name [films.actors.name] ;
-}
-                </pre>
-            </aside>
-        </section>
-        <section>
-            <h2>Matcher</h2>
-            <p>
-                As previously described, a matcher can be used to substitute a result for another string in order to match with some existing URI in
-                the LOD cloud. Firstly, it is declared in the declarations part and then it is used inside the shape in the expression that we want
-                to replace its results. In the example below, Spain mention in Spanish, French, German and Portuguese are converted to the English
-                version to match with the URI http://dbpedia.org/resource/Spain.
-            </p>
-            <aside class="example" title="Matcher example">
+            <section>
+                <h2>Shapes in ShExML</h2>
+                <p>
+                    Shapes in ShExML are similar to those in ShEx but with some modifications. As showed in the example, a shape is conformed by: the shape name which
+                    can take a prefix to define its namespace; the expression for generating the subjects of the triple which is enclosed between square brackets and
+                    preceded by the prefix name; and a set of predicate and object tuples. Each of these tuples contain: a predicate in the form of prefix plus 
+                    terminal (like in Turtle) and the object which is an expression enclosed between square brackets and with an optional prefix. In the absence
+                    of the optional prefix a literal will be generated and an URI if the prefix is present.
+                </p>
+                <aside class="example" title="Shape example">
                     <pre>
-MATCHER spain &lt;España, Espagne, Spanien, Espanha AS Spain&gt;
+    ITERATOR film_xml &lt;xpath: //film&gt; {
+        FIELD id &lt;@id&gt;
+        FIELD name &lt;name&gt;
+        FIELD year &lt;year&gt;
+        FIELD country &lt;country&gt;
+        FIELD directors &lt;directors/director&gt;
+    }
+    ITERATOR film_json &lt;jsonpath: $.films[*]&gt; {
+        FIELD id &lt;id&gt;
+        FIELD name &lt;name&gt;
+        FIELD year &lt;year&gt;
+        FIELD country &lt;country&gt;
+        FIELD directors &lt;director&gt;
+    }
+    EXPRESSION films &lt;films_xml_file.film_xml UNION films_json_file.film_json&gt;
 
-:Films :[films.id] {
-    :name [films.name] ;
-    :year :[films.year] ;
-    :country dbr:[films.country MATCHING spain] ;
-    :director [films.directors] ;
-}
+    :Films :[films.id] {
+        :name [films.name] ;
+        :year :[films.year] ;
+        :country [films.country] ;
+        :director [films.directors] ;
+    }
                     </pre>
                 </aside>
+                <p>
+                    In the example above, which is extracted from the first example of this specification, we are defining two iterators that then are merged
+                    using the union expression. Then, we define a shape called ':Films' whose subjects are extracted from the union films taking the id attribute.
+                    The id attribute is the union of the id fields of both iterators as we have explained earlier. Then 4 tuples of predicate and object are
+                    defined. These tuples will generate the different triples as they constitute the basic subject predicate object structure of the RDF triples.
+                    Notice that when a ':' is used before an expression, like in films.year, a URI will be generated taking into account the prefix given.
+                    In the example below, the same transformation is done but using field expressions instead of iterator expressions.
+                </p>
+                <aside class="example" title="Shape example">
+                    <pre>
+    ITERATOR film_xml &lt;xpath: //film&gt; {
+        FIELD id &lt;@id&gt;
+        FIELD name &lt;name&gt;
+        FIELD year &lt;year&gt;
+        FIELD country &lt;country&gt;
+        FIELD directors &lt;directors/director&gt;
+    }
+    ITERATOR film_json &lt;jsonpath: $.films[*]&gt; {
+        FIELD id &lt;id&gt;
+        FIELD name &lt;name&gt;
+        FIELD year &lt;year&gt;
+        FIELD country &lt;country&gt;
+        FIELD directors &lt;director&gt;
+    }
+    EXPRESSION films_ids &lt;films_xml_file.film_xml.id UNION films_json_file.film_json.id&gt;
+    EXPRESSION films_names &lt;films_xml_file.film_xml.name UNION films_json_file.film_json.name&gt;
+    EXPRESSION films_years &lt;films_xml_file.film_xml.year UNION films_json_file.film_json.year&gt;
+    EXPRESSION films_countries &lt;films_xml_file.film_xml.country UNION films_json_file.film_json.country&gt;
+    EXPRESSION films_directors &lt;films_xml_file.film_xml.directors UNION films_json_file.film_json.directors&gt;
+
+    :Films :[films_ids] {
+        :name [films_names] ;
+        :year :[films_years] ;
+        :country [films_countries] ;
+        :director [films_directors] ;
+    }
+                    </pre>
+                </aside>
+            </section>
+            <section>
+                <h2>Linking shapes</h2>
+                <p>
+                    There are occasions when a type has some nested subtypes. In ShEx, it is possible linking shapes to say that an object has to
+                    comply with a certain shape. In ShExML, this will trigger the generation of the new entity and they will be linked in RDF using
+                    the subject of the nested entity. In the example below an :Actor shape is linked to :Films shape.
+                </p>
+                <aside class="example" title="Shape example">
+                    <pre>
+    :Films :[films.id] {
+        :name [films.name] ;
+        :year :[films.year] ;
+        :country [films.country] ;
+        :director [films.directors] ;
+        :cast @:Actor ;
+    }
+
+    :Actor :[films.actors.id] {
+        :name [films.actors.name] ;
+    }
+                    </pre>
+                </aside>
+            </section>
+            <section>
+                <h2>Matcher</h2>
+                <p>
+                    As previously described, a matcher can be used to substitute a result for another string in order to match with some existing URI in
+                    the LOD cloud. Firstly, it is declared in the declarations part and then it is used inside the shape in the expression that we want
+                    to replace its results. In the example below, Spain mention in Spanish, French, German and Portuguese are converted to the English
+                    version to match with the URI http://dbpedia.org/resource/Spain.
+                </p>
+                <aside class="example" title="Matcher example">
+                        <pre>
+    MATCHER spain &lt;España, Espagne, Spanien, Espanha AS Spain&gt;
+
+    :Films :[films.id] {
+        :name [films.name] ;
+        :year :[films.year] ;
+        :country dbr:[films.country MATCHING spain] ;
+        :director [films.directors] ;
+    }
+                        </pre>
+                    </aside>
+            </section>
+            <section>
+                <h2>Graphs</h2>
+                <p>Graphs is the mechanism to generate named graphs in ShExML and it follows <a href="https://www.w3.org/2001/sw/wiki/ShEx/Graph_Named_Graphs">the proposed syntax for ShEx</a>. Thus, it is possible to include various shapes inside which generated triples will be under the indicated named graph. Shapes out of any graph definition will be bounded to the default graph as described on the RDF Datasets specification [[RDFDatasets]]. In the example below all triples generated with the :Films shape will be under the :MyFilms graph.</p>
+                <aside class="example" title="Graph example">
+                    <pre>
+    :MyFilms [[
+        :Films :[films.id] {
+            :name [films.name] ;
+            :year :[films.year] ;
+            :country [films.country] ;
+            :director [films.directors] ;
+        }
+    ]]
+                    </pre>
+                </aside>
+            </section>
         </section>
     </section>
   </body>
