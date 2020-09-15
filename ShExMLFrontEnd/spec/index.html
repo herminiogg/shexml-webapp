@@ -137,13 +137,14 @@ PREFIX schema: &lt;http://schema.org/&gt;
             <h2>Source</h2>
             <p>
                 A source is the declaration that allows to define a data source from a given URL. This URL will be the link to a file in one of the
-                supported formats. A variable is defined to refer to this declaration. The following example shows how to declare two files, one from
-                the internet and the other one from the local storage.
+                supported formats. For databases the JDBC URL will be used instead. A variable is defined to refer to this declaration. The following example shows how to declare two files, one from
+                the internet and the other one from the local storage. In addition, a database connection is also defined under the database variable.
             </p>
             <aside class="example" title="Source example">
                 <pre>
 SOURCE xml_file &lt;https://example.com/file.xml&gt;
 SOURCE json_file &lt;file:///example/path/to/file/file.json&gt;
+SOURCE database &lt;jdbc:mysql://localhost:3306/mydb&gt;
                 </pre>
             </aside>
             <section>
@@ -154,7 +155,7 @@ SOURCE json_file &lt;file:///example/path/to/file/file.json&gt;
                         <li>JSON</li>
                         <li>XML</li>
                         <li>CSV</li>
-                        <li>Relational Databases (using SQL)</li>
+                        <li>Relational Databases (using JDBC URL)</li>
                     </ul>
                 </p>
             </section>
