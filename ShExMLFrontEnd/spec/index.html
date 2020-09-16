@@ -469,7 +469,7 @@ AUTOINCREMENT myId &lt;"my" + 0 to 10 by 2 + "Id"&gt;
                 explained—those notions needed for the understanding of ShExML—so we encourage people who want a further reading to go to ShEx specification [[SHEX]].
             </p>
             <section>
-                <h2>Shapes in ShExML</h2>
+                <h3>Shapes in ShExML</h2>
                 <p>
                     Shapes in ShExML are similar to those in ShEx but with some modifications. As showed in the example, a shape is conformed by: the shape name which
                     can take a prefix to define its namespace; the expression for generating the subjects of the triple which is enclosed between square brackets and
@@ -586,22 +586,22 @@ AUTOINCREMENT myId &lt;"my" + 0 to 10 by 2 + "Id"&gt;
                         </pre>
                     </aside>
             </section>
-            <section>
-                <h2>Graphs</h2>
-                <p>Graphs is the mechanism to generate named graphs in ShExML and it follows <a href="https://www.w3.org/2001/sw/wiki/ShEx/Graph_Named_Graphs">the proposed syntax for ShEx</a>. Thus, it is possible to include various shapes inside which generated triples will be under the indicated named graph. Shapes out of any graph definition will be bounded to the default graph as described on the RDF Datasets specification [[RDFDatasets]]. In the example below all triples generated with the :Films shape will be under the :MyFilms graph.</p>
-                <aside class="example" title="Graph example">
-                    <pre>
-    :MyFilms [[
-        :Films :[films.id] {
-            :name [films.name] ;
-            :year :[films.year] ;
-            :country [films.country] ;
-            :director [films.directors] ;
-        }
-    ]]
-                    </pre>
-                </aside>
-            </section>
+        </section>
+        <section>
+            <h2>Graphs</h2>
+            <p>Graphs is the mechanism to generate named graphs in ShExML and it follows <a href="https://www.w3.org/2001/sw/wiki/ShEx/Graph_Named_Graphs">the proposed syntax for ShEx</a>. Thus, it is possible to include various shapes inside which generated triples will be under the indicated named graph. Shapes out of any graph definition will be bounded to the default graph as described on the RDF Datasets specification [[RDFDatasets]]. In the example below all triples generated with the :Films shape will be under the :MyFilms graph.</p>
+            <aside class="example" title="Graph example">
+                <pre>
+:MyFilms [[
+    :Films :[films.id] {
+        :name [films.name] ;
+        :year :[films.year] ;
+        :country [films.country] ;
+        :director [films.directors] ;
+    }
+]]
+                </pre>
+            </aside>
         </section>
     </section>
   </body>
