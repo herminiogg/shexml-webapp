@@ -1,0 +1,16 @@
+<PurchaseOrder OrderDate="2020-01-01">
+    <ShipTo country="US">
+        <name>Bill</name>
+        <street>One street</street>
+        <city>New York</city>
+        <state>NY</state>
+        <zip>22222</zip>
+    </ShipTo>
+    <BillTo country="US">
+        <name>Bill</name>
+        <street>One street</street>
+        <city>New York</city>
+        <state>NY</state>
+        <zip>22222</zip>
+    </BillTo>
+</PurchaseOrder>
