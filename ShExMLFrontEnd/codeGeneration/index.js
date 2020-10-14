@@ -106,7 +106,7 @@ $('#generateShExML').click(function() {
 })
 
 function callForShExMLGeneration(content) {
-    $.ajax("http://http://shexml.herminiogarcia.com:8080/generateShexmlFromXSD", {
+    $.ajax("http://shexml.herminiogarcia.com:8080/generateShexmlFromXSD", {
         "data": JSON.stringify(content),
         "type": "POST",
         "processData": false,
