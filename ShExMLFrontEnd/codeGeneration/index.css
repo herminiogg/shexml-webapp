@@ -1,0 +1,27 @@
+#editorTitle, #resultTitle {
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+#submitButton, #submitButtonRML, #conversionFormat, #loadingButton, #loadingButtonRML, #permalinkButton {
+    margin-right: 15px;
+    margin-top: 15px;
+}
+
+#editorsSpace {
+    padding-bottom: 20px;
+}
+
+footer p {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#loadingButton, #loadingButtonRML, #loadingGenerateShExML {
+    display: none;
+}
+
+.yashe .CodeMirror, .CodeMirror {
+    border: 1px solid #eee;
+    height: auto;
+}

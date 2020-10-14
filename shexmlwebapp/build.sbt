@@ -19,6 +19,7 @@ libraryDependencies ++= Seq(
   "org.eclipse.jetty" % "jetty-webapp" % "9.4.9.v20180320" % "container",
   "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
   "com.github.herminiogg" % "shexml" % "develop-SNAPSHOT",
+  "com.github.herminiogg" % "xmlschema2shex" % "develop-SNAPSHOT",
   "org.scalatra" %% "scalatra-json" % ScalatraVersion,
   "org.json4s"   %% "json4s-jackson" % "3.5.2",
 )
