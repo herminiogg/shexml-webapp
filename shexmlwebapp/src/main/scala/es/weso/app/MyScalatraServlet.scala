@@ -45,6 +45,16 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
     }
   }
 
+  post("/generateShEx") {
+    val content = parsedBody.extract[ShExGeneration]
+    val mappingLauncher = new MappingLauncher()
+    val result = Try(mappingLauncher.launchShExGeneration(content.shexml))
+    result match {
+      case Success(r) => Ok(r)
+      case Failure(error) => BadRequest(error.getMessage)
+    }
+  }
+
   post("/validateXMLFile") {
     val content = parsedBody.extract[XMLValidation]
     val xml = content.xml
@@ -97,4 +107,5 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
 }
 
 case class Content(shexml: String, format: String)
+case class ShExGeneration(shexml: String)
 case class XMLValidation(xml: String, xsd: String)

@@ -1,0 +1,36 @@
+#editorTitle, #resultTitle, #shexTitle {
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+#shexTitle {
+    padding-top: 10px;
+}
+
+#submitButton, #submitButtonShEx, #conversionFormat, #loadingButton, #loadingButtonShEx, #goToShExButton {
+    margin-right: 15px;
+    margin-top: 15px;
+}
+
+#editorsSpace {
+    padding-bottom: 20px;
+}
+
+footer p {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#loadingButton, #loadingButtonShEx {
+    display: none;
+}
+
+#editor .yashe .CodeMirror {
+    border: 1px solid #eee;
+    height: auto;
+}
+
+#resultEditor .CodeMirror, #shexEditor .yashe .CodeMirror {
+    border: 1px solid #eee;
+    height: 20em;
+}

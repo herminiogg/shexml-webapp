@@ -1,4 +1,4 @@
-var editor = YASHE(document.querySelector("#editor"), {
+var editor = YASHEML(document.querySelector("#editor"), {
     lineNumbers: true,
     lineWrapping: true,
     theme: "default",
