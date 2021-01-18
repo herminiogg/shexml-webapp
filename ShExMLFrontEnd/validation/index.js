@@ -118,7 +118,12 @@ $("#submitButtonShEx").click(function(){
 $('#goToShExButton').click(function(){
     var shexDocument = encodeURIComponent(shexEditor.getValue());
     var resultDocument = encodeURIComponent(resultEditor.getValue());
-    var externalURL = "http://rdfshape.weso.es/shExValidate?data=" + resultDocument + "&schema=" + shexDocument;
+    var externalURL = "http://rdfshape.weso.es/shExValidate"+
+        "?activeSchemaTab=%23schemaTextArea&activeTab=%23dataTextArea&data=" + resultDocument + 
+        "&dataFormat=TURTLE&dataFormatTextArea=TURTLE&endpoint=&inference=None&schema=" + shexDocument +
+        "&schemaEmbedded=false&schemaEngine=ShEx&schemaFormat=ShExC&schemaFormatTextArea=ShExC"+
+        "&shapeMap= &shapeMapActiveTab=%23shapeMapTextArea&shapeMapFormat=Compact&shapeMapFormatTextArea=Compact&triggerMode=shapeMap" ;
+    console.log(externalURL);
     window.open(externalURL);
 })
 
