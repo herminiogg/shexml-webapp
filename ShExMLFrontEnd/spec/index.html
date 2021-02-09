@@ -28,6 +28,16 @@
                 title: "RDF 1.1: On Semantics of RDF Datasets",
                 href: "https://www.w3.org/TR/rdf11-datasets/",
                 status: "W3C Working Group Note"
+            },
+            "BCP47": {
+                title: "Tags for Identifying Languages",
+                href: "https://tools.ietf.org/html/bcp47",
+                status: "Internet Best Current Practices for the Internet Community"
+            },
+            "Jsonpath": {
+                title: "JSONPath - XPath for JSON",
+                href: "https://goessner.net/articles/JsonPath/",
+                status: "Specification proposal"
             }
         }
       };
@@ -156,6 +166,7 @@ SOURCE database &lt;jdbc:mysql://localhost:3306/mydb&gt;
                         <li>XML</li>
                         <li>CSV</li>
                         <li>Relational Databases (using JDBC URL)</li>
+                        <li>RDF via SPARQL queries</li>
                     </ul>
                 </p>
             </section>
@@ -168,6 +179,21 @@ SOURCE database &lt;jdbc:mysql://localhost:3306/mydb&gt;
                     </pre>
                 </aside>
             </section>
+        </section>
+        <section>
+            <h2>Query</h2>
+            <p>
+                Query declaration is used whenever a query wants to be separated from the iterator definition (e.g., long queries or multi-line queries).
+                The query can be defined inline or it can be externalised in a file. In the case of defining it inline the same syntax as in iterators is used (see first example).
+                In the case of external files and URL is expected as within the Source declaration. Here, 
+                there is no need to use any iterator keyword as it is inferred from file extension.
+            </p>
+            <aside class="example" title="Query declaration example">
+                <pre>
+QUERY inline_query &lt;sql: SELECT * FROM example;&gt;
+QUERY external_query &lt;/path/to/example_query.sparql&gt;
+                </pre>
+            </aside>
         </section>
         <section>
             <h2>Iterator</h2>
@@ -191,6 +217,8 @@ ITERATOR example &lt;jsonpath: $.path.to.entity[*]&gt; { }
                         <li><strong>jsonpath:</strong> (JSONPath query for JSON files)</li>
                         <li><strong>csvperrow</strong> (CSV iterator row by row)</li>
                         <li><strong>sql:</strong> (SQL query with a table of results, to be iterated row by row)</li>
+                        <li><strong>sparql:</strong> (SPARQL query with a table of result, to be iterated row by row)</li>
+                        <li>External query: It is possible to define queries in an external clause or file using their variable name (previously defined with QUERY declaration)</li>
                     </ul>
                 </p>
             </section>
@@ -211,6 +239,26 @@ ITERATOR example &lt;xpath: /path/to/entity&gt; {
                         </pre>
                     </aside>
                 </p>
+                <section>
+                    <h3>Pushed and popped fields</h3>
+                    <p>Pushed and popped fields can be used to push values down into a hierarchical iteration model. For example,
+                        with JSONPath [[Jsonpath]] it is not possible to query parent nodes to get their values as it can done with XPath. Therefore,
+                        ShExML offers this possibility with PUSHED_FIELD keyword which tells the engine to save this value when going deeper
+                        in the hierarchy iteration. Then, this value can be retrieved with POPPED_FIELD keyword using pushed field variable name
+                        as the query.
+                    </p>
+                    <aside class="example" title="Pushed and popped fields example">
+                        <pre>
+ITERATOR example &lt;jsonpath: $&gt; {
+    PUSHED_FIELD field1 &lt;id&gt;
+    ITERATOR nestedIterator &lt;nestedElements[*]&gt; {
+        POPPED_FIELD field2 &lt;field1&gt;
+        FIELD field3 &lt;field3&gt;
+    }
+}
+                        </pre>
+                    </aside>
+                </section>
             </section>
             <section>
                 <h2>Nested Iterator</h2>
@@ -585,6 +633,63 @@ AUTOINCREMENT myId &lt;"my" + 0 to 10 by 2 + "Id"&gt;
     }
                         </pre>
                     </aside>
+            </section>
+            <section>
+                <h2>Data types (static version)</h2>
+                <p>
+                    Object generation clauses can be tagged with an XMLSchema data type if a literal is generated (without prefix).
+                    Therefore, to output an speficif type, it should be declared after object generation clause (see the example below). 
+                </p>
+                <aside class="example" title="Static data type declaration">
+                    <pre>
+    :Films :[films.id] {
+        :name [films.name] xsd:string ;
+    }
+                    </pre>
+                </aside>
+            </section>
+            <section>
+                <h2>Data types (dynamic version)</h2>
+                <p>
+                    It is also possible to retrieve data types values from input sources. For doing so, a generation clause should 
+                    be indicated next to the object generation clause (using prefix depending on the input value).
+                </p>
+                <aside class="example" title="Static data type declaration">
+                    <pre>
+    :Films :[films.id] {
+        :name [films.name] xsd:[films.datatype] ;
+        :year [films.name] [films.yearDatatype] ;
+    }
+                    </pre>
+                </aside>
+            </section>
+            <section>
+                <h2>Lang tags (static version)</h2>
+                <p>
+                    Object generation clauses can be tagged with a lang tag (conformant to BCP 47 [[BCP47]]) indicating the language of the output string.
+                    Therefore, to output an speficif lang tag, it should be declared after object generation clause (see the example below). 
+                </p>
+                <aside class="example" title="Static lang tag declaration">
+                    <pre>
+    :Films :[films.id] {
+        :name [films.name] @en ;
+    }
+                    </pre>
+                </aside>
+            </section>
+            <section>
+                <h2>Lang tags (dynamic version)</h2>
+                <p>
+                    It is also possible to retrieve lang tag values from input sources. For doing so, a generation clause should 
+                    be indicated next to the object generation clause.
+                </p>
+                <aside class="example" title="Static lang tag declaration">
+                    <pre>
+    :Films :[films.id] {
+        :name [films.name] @[films.lang] ;
+    }
+                    </pre>
+                </aside>
             </section>
         </section>
         <section>
