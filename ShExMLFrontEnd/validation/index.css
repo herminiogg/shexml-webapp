@@ -1,9 +1,9 @@
-#editorTitle, #resultTitle, #shexTitle {
+#editorTitle, #resultTitle, #shexTitle, #shapeMapTitle {
     padding-left: 15px;
     padding-bottom: 15px;
 }
 
-#shexTitle {
+#shexTitle, #shapeMapTitle {
     padding-top: 10px;
 }
 

@@ -3,7 +3,7 @@ var editor = YASHEML(document.querySelector("#editor"), {
     lineWrapping: true,
     theme: "default",
     viewportMargin: Infinity
-})
+});
 var filmsShExML = `PREFIX ex: <http://example.com/>
 PREFIX dbr: <http://dbpedia.org/resource/>
 PREFIX schema: <http://schema.org/>
@@ -45,7 +45,7 @@ var resultEditor = CodeMirror(document.querySelector("#resultEditor"), {
     lineWrapping: true,
     theme: "default",
     viewportMargin: Infinity
-})
+});
 
 var shexEditor = YASHE(document.querySelector("#shexEditor"), {
     value: "",
@@ -54,7 +54,14 @@ var shexEditor = YASHE(document.querySelector("#shexEditor"), {
     theme: "default",
     viewportMargin: Infinity,
     showShareButton: false
-})
+});
+
+var shapeMapEditor = CodeMirror(document.querySelector("#shapeMapEditor"), {
+    lineNumbers: true,
+    lineWrapping: true,
+    theme: "default",
+    viewportMargin: Infinity
+});
 
 var urlParams = new URLSearchParams(window.location.search);
 
@@ -105,7 +112,7 @@ $("#submitButtonShEx").click(function(){
         "contentType": "application/json",
         "success": function(data) {
             shexEditor.setValue(data);
-            nonLoadingButtonShEx();
+            generateShapeMap(content);
         },
         "error": function(jqXHR, textStatus, errorThrown) {
             createAlert(jqXHR.responseText);
@@ -115,17 +122,36 @@ $("#submitButtonShEx").click(function(){
     loadingButtonShEx();
 });
 
+function generateShapeMap(content) {
+    $.ajax("http://shexml.herminiogarcia.com:8080/generateShapeMap", {
+        "data": JSON.stringify(content),
+        "type": "POST",
+        "processData": false,
+        "dataType": "text",
+        "contentType": "application/json",
+        "success": function(data) {
+            shapeMapEditor.setValue(data);
+            nonLoadingButtonShEx();
+        },
+        "error": function(jqXHR, textStatus, errorThrown) {
+            createAlert(jqXHR.responseText);
+            nonLoadingButtonShEx();
+        }
+    });
+}
+
 $('#goToShExButton').click(function(){
     var shexDocument = encodeURIComponent(shexEditor.getValue());
     var resultDocument = encodeURIComponent(resultEditor.getValue());
+    var shapeMapDocument = encodeURIComponent(shapeMapEditor.getValue());
     var externalURL = "http://rdfshape.weso.es/shExValidate"+
         "?activeSchemaTab=%23schemaTextArea&activeTab=%23dataTextArea&data=" + resultDocument + 
         "&dataFormat=TURTLE&dataFormatTextArea=TURTLE&endpoint=&inference=None&schema=" + shexDocument +
         "&schemaEmbedded=false&schemaEngine=ShEx&schemaFormat=ShExC&schemaFormatTextArea=ShExC"+
-        "&shapeMap= &shapeMapActiveTab=%23shapeMapTextArea&shapeMapFormat=Compact&shapeMapFormatTextArea=Compact&triggerMode=shapeMap" ;
+        "&shapeMap="+ shapeMapDocument +"&shapeMapActiveTab=%23shapeMapTextArea&shapeMapFormat=Compact&shapeMapFormatTextArea=Compact&triggerMode=shapeMap" ;
     console.log(externalURL);
     window.open(externalURL);
-})
+});
 
 function createAlert(errorMessage) {
     var alertHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
