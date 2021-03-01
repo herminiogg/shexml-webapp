@@ -1,13 +1,16 @@
-#editorTitle, #resultTitle, #shexTitle, #shapeMapTitle {
+#editorTitle, #resultTitle, #shexTitle, #shapeMapTitle, #shaclTitle {
     padding-left: 15px;
     padding-bottom: 15px;
 }
 
-#shexTitle, #shapeMapTitle {
+#shexTitle, #shapeMapTitle, #shaclTitle {
     padding-top: 10px;
 }
 
-#submitButton, #submitButtonShEx, #conversionFormat, #loadingButton, #loadingButtonShEx, #goToShExButton {
+#submitButton, #submitButtonShEx, #conversionFormat, 
+#loadingButton, #loadingButtonShEx, #goToShExButton,
+#submitButtonSHACL, #loadingButtonSHACL, #goToSHACLButton,
+#closedShapes {
     margin-right: 15px;
     margin-top: 15px;
 }
@@ -21,7 +24,7 @@ footer p {
     padding-bottom: 10px;
 }
 
-#loadingButton, #loadingButtonShEx {
+#loadingButton, #loadingButtonShEx, #loadingButtonSHACL {
     display: none;
 }
 
@@ -30,7 +33,7 @@ footer p {
     height: auto;
 }
 
-#resultEditor .CodeMirror, #shexEditor .yashe .CodeMirror {
+#resultEditor .CodeMirror, #shexEditor .yashe .CodeMirror, #shaclEditor .CodeMirror {
     border: 1px solid #eee;
     height: 20em;
 }

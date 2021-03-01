@@ -17,20 +17,22 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li><a class="nav-item nav-link" href="../">Intro</a></li>
-                <li><a class="nav-item nav-link active">Map &amp; Merge</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Validation Generator
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="../validation/shex.html">ShEx</a>
-                        <a class="dropdown-item" href="../validation/shacl.html">SHACL</a>
-                    </div>
-                </li>
-                <li><a class="nav-item nav-link" href="../spec">Spec</a></li>
-            </ul>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li><a class="nav-item nav-link" href="../">Intro</a></li>
+                    <li><a class="nav-item nav-link" href="../editor">Map &amp; Merge</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Validation Generator
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item active" href="../validation/shex.html">ShEx</a>
+                            <a class="dropdown-item" href="../validation/shacl.html">SHACL</a>
+                        </div>
+                    </li>
+                    <li><a class="nav-item nav-link" href="../spec">Spec</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
     <div id="mainContainer" class="container">
@@ -50,14 +52,14 @@
                 <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 <span id="loadingText">Loading...</span>
             </button>
-            <button id="submitButtonRML" type="button" class="btn btn-success">
-                <span id="convertToRMLText">Convert to RML</span>
+            <button id="submitButtonShEx" type="button" class="btn btn-success">
+                <span id="convertToShExText">Convert to ShEx</span>
             </button>
-            <button id="loadingButtonRML" type="button" class="btn btn-success" disabled>
-                <span id="loadingSpinnerRML" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                <span id="loadingTextRML">Loading...</span>
+            <button id="loadingButtonShEx" type="button" class="btn btn-success" disabled>
+                <span id="loadingSpinnerShEx" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span id="loadingTextShEx">Loading...</span>
             </button>
-            <button id="permalinkButton" type="button" class="btn btn-primary">Permalink</button>
+            <button id="goToShExButton" type="button" class="btn btn-primary">Test validation</button>
         </div>
         <div id="editorsSpace" class="row">
             <div class="col-lg-6 col-12">
@@ -75,6 +77,18 @@
                 <div class="row">
                     <div id="resultEditor" class="col"></div>
                 </div>
+                <div class="row">
+                    <h3 id="shexTitle">Generated ShEx</h3>
+                </div>
+                <div class="row">
+                    <div id="shexEditor" class="col"></div>
+                </div>
+                <div class="row">
+                    <h3 id="shapeMapTitle">Generated Shape Map</h3>
+                </div>
+                <div class="row">
+                    <div id="shapeMapEditor" class="col"></div>
+                </div>
             </div>
         </div>
         <hr>
@@ -89,5 +103,6 @@
 <script src="codemirror/lib/codemirror.js"></script>
 <script src="codemirror/mode/turtle/turtle.js"></script>
 <script src="https://herminiogarcia.com/YASHEML/dist/yashe.bundled.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/yashe/dist/yashe.bundled.min.js'></script>
 <script src="index.js"></script>
 </html>

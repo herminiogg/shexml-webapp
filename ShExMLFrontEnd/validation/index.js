@@ -7,7 +7,8 @@ var editor = YASHEML(document.querySelector("#editor"), {
 var filmsShExML = `PREFIX ex: <http://example.com/>
 PREFIX dbr: <http://dbpedia.org/resource/>
 PREFIX schema: <http://schema.org/>
-PREFIX xs: <http://www.w3.org/2001/XMLSchema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 SOURCE films_xml_file <http://shexml.herminiogarcia.com/files/films.xml>
 SOURCE films_json_file <http://shexml.herminiogarcia.com/files/films.json>
 ITERATOR film_xml <xpath: //film> {
@@ -30,7 +31,8 @@ ITERATOR film_json <jsonpath: $.films[*]> {
 }
 EXPRESSION films <films_xml_file.film_xml UNION films_json_file.film_json>
 
-ex:Films ex:[films.id] {
+ex:Film ex:[films.id] {
+    a ex:Film ;
     schema:name [films.name] ;
     ex:year dbr:[films.year] ;
     schema:countryOfOrigin dbr:[films.country] ;
@@ -47,21 +49,33 @@ var resultEditor = CodeMirror(document.querySelector("#resultEditor"), {
     viewportMargin: Infinity
 });
 
-var shexEditor = YASHE(document.querySelector("#shexEditor"), {
-    value: "",
-    lineNumbers: true,
-    lineWrapping: true,
-    theme: "default",
-    viewportMargin: Infinity,
-    showShareButton: false
-});
+if($('#shexEditor').length > 0) {
+    var shexEditor = YASHE(document.querySelector("#shexEditor"), {
+        value: "",
+        lineNumbers: true,
+        lineWrapping: true,
+        theme: "default",
+        viewportMargin: Infinity,
+        showShareButton: false
+    });
+}
+if($('#shapeMapEditor').length > 0) {
+    var shapeMapEditor = CodeMirror(document.querySelector("#shapeMapEditor"), {
+        lineNumbers: true,
+        lineWrapping: true,
+        theme: "default",
+        viewportMargin: Infinity
+    });
+}
 
-var shapeMapEditor = CodeMirror(document.querySelector("#shapeMapEditor"), {
-    lineNumbers: true,
-    lineWrapping: true,
-    theme: "default",
-    viewportMargin: Infinity
-});
+if($('#shaclEditor').length > 0) {
+    var shaclEditor = CodeMirror(document.querySelector("#shaclEditor"), {
+        lineNumbers: true,
+        lineWrapping: true,
+        theme: "default",
+        viewportMargin: Infinity
+    });
+}
 
 var urlParams = new URLSearchParams(window.location.search);
 
@@ -99,59 +113,102 @@ $("#submitButton").click(function(){
     loadingButton();
 });
 
-$("#submitButtonShEx").click(function(){
-    var shexmldocument = editor.getValue();
-    var content = {
-        shexml: shexmldocument
-    }
-    $.ajax("http://shexml.herminiogarcia.com:8080/generateShEx", {
-        "data": JSON.stringify(content),
-        "type": "POST",
-        "processData": false,
-        "dataType": "text",
-        "contentType": "application/json",
-        "success": function(data) {
-            shexEditor.setValue(data);
-            generateShapeMap(content);
-        },
-        "error": function(jqXHR, textStatus, errorThrown) {
-            createAlert(jqXHR.responseText);
-            nonLoadingButtonShEx();
+if($('#submitButtonShEx').length > 0) {
+    $("#submitButtonShEx").click(function(){
+        var shexmldocument = editor.getValue();
+        var content = {
+            shexml: shexmldocument
         }
+        $.ajax("http://shexml.herminiogarcia.com:8080/generateShEx", {
+            "data": JSON.stringify(content),
+            "type": "POST",
+            "processData": false,
+            "dataType": "text",
+            "contentType": "application/json",
+            "success": function(data) {
+                shexEditor.setValue(data);
+                generateShapeMap(content);
+            },
+            "error": function(jqXHR, textStatus, errorThrown) {
+                createAlert(jqXHR.responseText);
+                nonLoadingButtonShEx();
+            }
+        });
+        loadingButtonShEx();
     });
-    loadingButtonShEx();
-});
 
-function generateShapeMap(content) {
-    $.ajax("http://shexml.herminiogarcia.com:8080/generateShapeMap", {
-        "data": JSON.stringify(content),
-        "type": "POST",
-        "processData": false,
-        "dataType": "text",
-        "contentType": "application/json",
-        "success": function(data) {
-            shapeMapEditor.setValue(data);
-            nonLoadingButtonShEx();
-        },
-        "error": function(jqXHR, textStatus, errorThrown) {
-            createAlert(jqXHR.responseText);
-            nonLoadingButtonShEx();
+    function generateShapeMap(content) {
+        $.ajax("http://shexml.herminiogarcia.com:8080/generateShapeMap", {
+            "data": JSON.stringify(content),
+            "type": "POST",
+            "processData": false,
+            "dataType": "text",
+            "contentType": "application/json",
+            "success": function(data) {
+                shapeMapEditor.setValue(data);
+                nonLoadingButtonShEx();
+            },
+            "error": function(jqXHR, textStatus, errorThrown) {
+                createAlert(jqXHR.responseText);
+                nonLoadingButtonShEx();
+            }
+        });
+    }
+}
+
+if($('#submitButtonSHACL').length > 0) {
+    $("#submitButtonSHACL").click(function(){
+        var shexmldocument = editor.getValue();
+        var content = {
+            shexml: shexmldocument,
+            closed: ($('#closedShapes').val() == 'true')
         }
+        $.ajax("http://shexml.herminiogarcia.com:8080/generateSHACL", {
+            "data": JSON.stringify(content),
+            "type": "POST",
+            "processData": false,
+            "dataType": "text",
+            "contentType": "application/json",
+            "success": function(data) {
+                shaclEditor.setValue(data);
+                nonLoadingButtonSHACL();
+            },
+            "error": function(jqXHR, textStatus, errorThrown) {
+                createAlert(jqXHR.responseText);
+                nonLoadingButtonSHACL();
+            }
+        });
+        loadingButtonSHACL();
     });
 }
 
-$('#goToShExButton').click(function(){
-    var shexDocument = encodeURIComponent(shexEditor.getValue());
-    var resultDocument = encodeURIComponent(resultEditor.getValue());
-    var shapeMapDocument = encodeURIComponent(shapeMapEditor.getValue());
-    var externalURL = "http://rdfshape.weso.es/shExValidate"+
-        "?activeSchemaTab=%23schemaTextArea&activeTab=%23dataTextArea&data=" + resultDocument + 
-        "&dataFormat=TURTLE&dataFormatTextArea=TURTLE&endpoint=&inference=None&schema=" + shexDocument +
-        "&schemaEmbedded=false&schemaEngine=ShEx&schemaFormat=ShExC&schemaFormatTextArea=ShExC"+
-        "&shapeMap="+ shapeMapDocument +"&shapeMapActiveTab=%23shapeMapTextArea&shapeMapFormat=Compact&shapeMapFormatTextArea=Compact&triggerMode=shapeMap" ;
-    console.log(externalURL);
-    window.open(externalURL);
-});
+if($('#goToShExButton').length > 0) {
+    $('#goToShExButton').click(function(){
+        var shexDocument = encodeURIComponent(shexEditor.getValue());
+        var resultDocument = encodeURIComponent(resultEditor.getValue());
+        var shapeMapDocument = encodeURIComponent(shapeMapEditor.getValue());
+        var externalURL = "http://rdfshape.weso.es/shExValidate"+
+            "?activeSchemaTab=%23schemaTextArea&activeTab=%23dataTextArea&data=" + resultDocument + 
+            "&dataFormat=TURTLE&dataFormatTextArea=TURTLE&endpoint=&inference=None&schema=" + shexDocument +
+            "&schemaEmbedded=false&schemaEngine=ShEx&schemaFormat=ShExC&schemaFormatTextArea=ShExC"+
+            "&shapeMap="+ shapeMapDocument +"&shapeMapActiveTab=%23shapeMapTextArea&shapeMapFormat=Compact&shapeMapFormatTextArea=Compact&triggerMode=shapeMap" ;
+        console.log(externalURL);
+        window.open(externalURL);
+    });
+}
+
+if($('#goToSHACLButton').length > 0) {
+    $('#goToSHACLButton').click(function(){
+        var shaclDocument = encodeURIComponent(shaclEditor.getValue());
+        var resultDocument = encodeURIComponent(resultEditor.getValue());
+        var externalURL = "http://rdfshape.weso.es/shaclValidate"+
+            "?activeSchemaTab=%23schemaTextArea&activeTab=%23dataTextArea&data=" + resultDocument + 
+            "&dataFormat=TURTLE&dataFormatTextArea=TURTLE&inference=None&schema=" + shaclDocument +
+            "&schemaEmbedded=false&schemaEngine=SHACLex&schemaFormat=TURTLE&schemaFormatTextArea=TURTLE&schemaInference=none&triggerMode=targetDecls" ;
+        console.log(externalURL);
+        window.open(externalURL);
+    });
+}
 
 function createAlert(errorMessage) {
     var alertHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -195,4 +252,14 @@ function loadingButtonShEx() {
 function nonLoadingButtonShEx() {
     $("#submitButtonShEx").toggle();
     $("#loadingButtonShEx").toggle();
+}
+
+function loadingButtonSHACL() {
+    $("#submitButtonSHACL").toggle();
+    $("#loadingButtonSHACL").toggle();
+}
+
+function nonLoadingButtonSHACL() {
+    $("#submitButtonSHACL").toggle();
+    $("#loadingButtonSHACL").toggle();
 }
