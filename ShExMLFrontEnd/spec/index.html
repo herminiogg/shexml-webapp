@@ -12,8 +12,8 @@
         editors: [{
           name: "Herminio García-González",
           url: "https://herminiogarcia.com",
-          company: "University of Oviedo",
-          companyURL: "http://www.uniovi.es",
+          company: "Kazerne Dossin",
+          companyURL: "https://kazernedossin.eu/en/",
           mailto: "herminiogg@gmail.com"
         }],
         edDraftURI: "http://shexml.herminiogarcia.com/spec",
@@ -147,13 +147,14 @@ PREFIX schema: &lt;http://schema.org/&gt;
             <h2>Source</h2>
             <p>
                 A source is the declaration that allows to define a data source from a given URL. This URL will be the link to a file in one of the
-                supported formats. For databases the JDBC URL will be used instead. A variable is defined to refer to this declaration. The following example shows how to declare two files, one from
-                the internet and the other one from the local storage. In addition, a database connection is also defined under the database variable.
+                supported formats. For databases the JDBC URL will be used instead. A variable is defined to refer to this declaration. The following example shows how to declare three files, one from
+                the internet and two other local files (absolute and relative paths). In addition, a database connection is also defined under the database variable.
             </p>
             <aside class="example" title="Source example">
                 <pre>
 SOURCE xml_file &lt;https://example.com/file.xml&gt;
 SOURCE json_file &lt;file:///example/path/to/file/file.json&gt;
+SOURCE json_relative_path &lt;file.json&gt;
 SOURCE database &lt;jdbc:mysql://localhost:3306/mydb&gt;
                 </pre>
             </aside>
@@ -506,6 +507,33 @@ AUTOINCREMENT myId &lt;"my" + 0 to 10 by 2 + "Id"&gt;
                     </pre>
                 </aside>
             </section>
+            <section>
+                <h2>Functions</h2>
+                <p>Functions allow to extend the functionality of ShExML in order to be able to clean, normalise and transform the obtained values before
+                    using them in the triples generation. For this purpouse ShExML allows to invoke functions residing in an external Scala class. Then, 
+                    the class can be loaded using the FUNCTIONS directive, assigning a variable name for later use and defining the URL where the file resides, in the same
+                    manner that we define data sources.
+                </p>
+                <aside class="example" title="External functions example">
+                    <pre>
+class Helper {
+
+    def allCapitals(input: String): String = {
+        input.toUpperCase
+    }
+    
+    def addOne(number: Int): Int = {
+        number + 1
+    }
+}
+                    </pre>
+                </aside>
+                <aside class="example" title="Example on defining a source of functions">
+                    <pre>
+FUNCTIONS helper &lt;scala: https://raw.githubusercontent.com/herminiogg/ShExML/enhancement-%23121/src/test/resources/functions.scala&gt;
+                    </pre>
+                </aside>
+            </section>
         </section>
     </section>
     <section>
@@ -687,6 +715,40 @@ AUTOINCREMENT myId &lt;"my" + 0 to 10 by 2 + "Id"&gt;
                     <pre>
     :Films :[films.id] {
         :name [films.name] @[films.lang] ;
+    }
+                    </pre>
+                </aside>
+            </section>
+            <section>
+                <h2>Invoking functions</h2>
+                <p>
+                    To invoke a function from a previosly declared Scala class the function call should be declared in the generation expression 
+                    and the value extraction expressions should be passed as arguments of this call. The syntax follows the same convetions used in
+                    object oriented languages like Java and Scala (see the example below).
+                </p>
+                <aside class="example" title="Static lang tag declaration">
+                    <pre>
+    :Films :[films.id] {
+        :name [helper.allCapitals(films.name)] ;
+        :year [helper.addOne(films.year)] ;
+    }
+                    </pre>
+                </aside>
+            </section>
+            <section>
+                <h2>Conditional statement generation</h2>
+                <p>
+                    It is possible to generate a statement or not based on a condition. These conditions can be expressed as value extraction expressions or function calls, having in both
+                    cases to return a boolean value (true or false). These conditions can be expressed either in subject expressions (conditioning the generation of all the triples containing the
+                    concerned subject) or a object expression (conditioning the generation of the triple containing the concerning object). The example below shows how a function can be used in the subject 
+                    and in the object expressions.
+                </p>
+                <aside class="example" title="Static lang tag declaration">
+                    <pre>
+    :Films :[films.id IF helper.isBefore2010(films.year)] {
+        :name [films.name] ;
+        :year [films.year] ;
+        :countryOfOrigin [films.country IF helper.outsideUSA(films.country)] ;
     }
                     </pre>
                 </aside>

@@ -2,7 +2,7 @@ package es.weso.app
 
 import java.net.URL
 
-import es.weso.shexml.MappingLauncher
+import com.herminiogarcia.shexml.MappingLauncher
 import es.weso.xmlschema2shex.parser.XMLSchema2ShexParser
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.SchemaFactory
@@ -28,16 +28,21 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
   post("/generate") {
     val content = parsedBody.extract[Content]
     val mappingLauncher = new MappingLauncher()
-    val result = Try(mappingLauncher.launchMapping(content.shexml, content.format))
-    result match {
-      case Success(r) => Ok(r)
-      case Failure(error) => BadRequest(error.getMessage)
+    if(content.shexml.contains("FUNCTIONS")) {
+      BadRequest("Functions execution is not allowed in this playground due to security reasons")
+    } else {
+      val result = Try(mappingLauncher.launchMapping(content.shexml, content.format))
+      result match {
+        case Success(r) => Ok(r)
+        case Failure(error) => BadRequest(error.getMessage)
+      }
     }
   }
 
   post("/generateRML") {
     val content = parsedBody.extract[Content]
     val mappingLauncher = new MappingLauncher()
+    //val prettify = Try(content.prettify.toString.toBoolean).getOrElse(false)
     val result = Try(mappingLauncher.launchRMLTranslation(content.shexml))
     result match {
       case Success(r) => Ok(r)
@@ -127,6 +132,7 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
 }
 
 case class Content(shexml: String, format: String)
+case class RMLContent(shexml: String, format: String, prettify: String)
 case class ShExGeneration(shexml: String)
 case class SHACLGeneration(shexml: String, closed: Boolean)
 case class XMLValidation(xml: String, xsd: String)

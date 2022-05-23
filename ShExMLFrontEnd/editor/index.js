@@ -113,9 +113,11 @@ $("#submitButton").click(function(){
 
 $("#submitButtonRML").click(function(){
     var shexmldocument = editor.getValue();
+    var useBlankNodes = $("#rmlBlankNodes").val();
     var content = {
         shexml: shexmldocument,
-        format: $("#conversionFormat").val()
+        format: $("#conversionFormat").val(),
+        prettify: useBlankNodes
     }
     $.ajax("http://shexml.herminiogarcia.com:8080/generateRML", {
         "data": JSON.stringify(content),
