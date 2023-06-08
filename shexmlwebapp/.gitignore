@@ -4,6 +4,7 @@
 *.DS_Store
 *.swp
 *.out
+.bsp/
 
 # rails specific
 *.sqlite3

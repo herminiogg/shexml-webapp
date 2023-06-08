@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-RUN apt-get update && apt-get install -y openjdk-8-jdk apache2 git locales gnupg2 curl
+RUN apt-get update && apt-get install -y openjdk-11-jdk apache2 git locales gnupg2 curl
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en

@@ -1,4 +1,4 @@
-val ScalatraVersion = "2.6.3"
+val ScalatraVersion = "2.8.2"
 
 organization := "es.weso"
 
@@ -16,13 +16,13 @@ libraryDependencies ++= Seq(
   "org.scalatra" %% "scalatra" % ScalatraVersion,
   "org.scalatra" %% "scalatra-scalatest" % ScalatraVersion % "test",
   "ch.qos.logback" % "logback-classic" % "1.2.3" % "runtime",
-  "org.eclipse.jetty" % "jetty-webapp" % "9.4.9.v20180320" % "container",
+  "org.eclipse.jetty" % "jetty-webapp" % "9.4.43.v20210629" % "container",
   "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
-  "com.github.herminiogg" % "shexml" % "master-SNAPSHOT",
-  "com.github.herminiogg" % "xmlschema2shex" % "a4d46de",
+  "com.herminiogarcia" %% "shexml" % "0.3.3" exclude("org.scala-lang.modules", "scala-parser-combinators_2.12"), // exclude("org.slf4j", "jcl-over-slf4j") exclude("org.slf4j", "slf4j-nop") exclude("javax.annotation", "javax.annotation-api") exclude("org.slf4j", "slf4j-api") exclude("ch.qos.logback", "logback-classic") exclude("com.typesafe.scala-logging", "scala-logging"),
+  "com.github.herminiogg" % "xmlschema2shex" % "a4d46de" exclude("com.github.herminiogg", "shexml") exclude("org.scala-lang.modules", "scala-parser-combinators_2.12"), // exclude("org.slf4j", "slf4j-api") exclude("ch.qos.logback", "logback-classic") exclude("com.typesafe.scala-logging", "scala-logging"),
   "org.scalatra" %% "scalatra-json" % ScalatraVersion,
-  "org.json4s"   %% "json4s-jackson" % "3.5.2",
+  "org.json4s"   %% "json4s-jackson" % "4.0.1",
 )
 
 enablePlugins(SbtTwirl)
-enablePlugins(ScalatraPlugin)
+enablePlugins(JettyPlugin)
