@@ -7,8 +7,8 @@ var editor = YASHEML(document.querySelector("#editor"), {
 var filmsShExML = `PREFIX : <http://example.com/>
 PREFIX dbr: <http://dbpedia.org/resource/>
 PREFIX schema: <http://schema.org/>
-SOURCE films_xml_file <http://shexml.herminiogarcia.com/files/films.xml>
-SOURCE films_json_file <http://shexml.herminiogarcia.com/files/films.json>
+SOURCE films_xml_file <https://shexml.herminiogarcia.com/files/films.xml>
+SOURCE films_json_file <https://shexml.herminiogarcia.com/files/films.json>
 ITERATOR film_xml <xpath: //film> {
     FIELD id <@id>
     FIELD name <name>
