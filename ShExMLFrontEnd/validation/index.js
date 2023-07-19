@@ -95,7 +95,7 @@ $("#submitButton").click(function(){
         shexml: shexmldocument,
         format: $("#conversionFormat").val()
     }
-    $.ajax("http://shexml.herminiogarcia.com:8080/generate", {
+    $.ajax("https://shexml.herminiogarcia.com:8080/generate", {
         "data": JSON.stringify(content),
         "type": "POST",
         "processData": false,
@@ -119,7 +119,7 @@ if($('#submitButtonShEx').length > 0) {
         var content = {
             shexml: shexmldocument
         }
-        $.ajax("http://shexml.herminiogarcia.com:8080/generateShEx", {
+        $.ajax("https://shexml.herminiogarcia.com:8080/generateShEx", {
             "data": JSON.stringify(content),
             "type": "POST",
             "processData": false,
@@ -138,7 +138,7 @@ if($('#submitButtonShEx').length > 0) {
     });
 
     function generateShapeMap(content) {
-        $.ajax("http://shexml.herminiogarcia.com:8080/generateShapeMap", {
+        $.ajax("https://shexml.herminiogarcia.com:8080/generateShapeMap", {
             "data": JSON.stringify(content),
             "type": "POST",
             "processData": false,
@@ -163,7 +163,7 @@ if($('#submitButtonSHACL').length > 0) {
             shexml: shexmldocument,
             closed: ($('#closedShapes').val() == 'true')
         }
-        $.ajax("http://shexml.herminiogarcia.com:8080/generateSHACL", {
+        $.ajax("https://shexml.herminiogarcia.com:8080/generateSHACL", {
             "data": JSON.stringify(content),
             "type": "POST",
             "processData": false,

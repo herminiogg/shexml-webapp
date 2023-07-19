@@ -31,7 +31,7 @@ $("#submitButton").click(function(){
         shexml: shexmldocument,
         format: $("#conversionFormat").val()
     }
-    $.ajax("http://shexml.herminiogarcia.com:8080/generate", {
+    $.ajax("https://shexml.herminiogarcia.com:8080/generate", {
         "data": JSON.stringify(content),
         "type": "POST",
         "processData": false,
@@ -55,7 +55,7 @@ $("#submitButtonRML").click(function(){
         shexml: shexmldocument,
         format: $("#conversionFormat").val()
     }
-    $.ajax("http://shexml.herminiogarcia.com:8080/generateRML", {
+    $.ajax("https://shexml.herminiogarcia.com:8080/generateRML", {
         "data": JSON.stringify(content),
         "type": "POST",
         "processData": false,
@@ -88,7 +88,7 @@ $('#generateShExML').click(function() {
         xml: xmlURL,
         xsd: xsdURL
     }
-    $.ajax("http://shexml.herminiogarcia.com:8080/validateXMLFile", {
+    $.ajax("https://shexml.herminiogarcia.com:8080/validateXMLFile", {
         "data": JSON.stringify(content),
         "type": "POST",
         "processData": false,
@@ -106,7 +106,7 @@ $('#generateShExML').click(function() {
 })
 
 function callForShExMLGeneration(content) {
-    $.ajax("http://shexml.herminiogarcia.com:8080/generateShexmlFromXSD", {
+    $.ajax("https://shexml.herminiogarcia.com:8080/generateShexmlFromXSD", {
         "data": JSON.stringify(content),
         "type": "POST",
         "processData": false,
