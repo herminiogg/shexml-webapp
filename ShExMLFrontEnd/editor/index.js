@@ -93,7 +93,7 @@ $("#submitButton").click(function(){
         shexml: shexmldocument,
         format: $("#conversionFormat").val()
     }
-    $.ajax("https://shexml.herminiogarcia.com:8080/generate", {
+    $.ajax("https://shexml.herminiogarcia.com/api/generate", {
         "data": JSON.stringify(content),
         "type": "POST",
         "processData": false,
@@ -119,7 +119,7 @@ $("#submitButtonRML").click(function(){
         format: $("#conversionFormat").val(),
         prettify: useBlankNodes
     }
-    $.ajax("https://shexml.herminiogarcia.com:8080/generateRML", {
+    $.ajax("https://shexml.herminiogarcia.com/api/generateRML", {
         "data": JSON.stringify(content),
         "type": "POST",
         "processData": false,
