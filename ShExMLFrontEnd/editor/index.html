@@ -33,7 +33,7 @@
             </ul>
         </div>
     </nav>
-    <div id="mainContainer" class="container">
+    <div id="mainContainer" class="container-fluid">
         <div class="row justify-content-end">
             <select name="conversionFormat" id="conversionFormat" class="custom-select col-2">
                 <option value="Turtle">Turtle</option>
@@ -50,10 +50,10 @@
                 <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 <span id="loadingText">Loading...</span>
             </button>
-            <!--<select name="rmlBlankNodes" id="rmlBlankNodes" class="custom-select col-2">
-                <option value="false">Don't use blank nodes</option>
-                <option value="true">Use blank nodes</option>
-            </select>-->
+            <div class="custom-control custom-switch" id="rmlBlankNodesDiv">
+                <input type="checkbox" class="custom-control-input" id="rmlBlankNodes">
+                <label class="custom-control-label" for="rmlBlankNodes">Prettify RML (using blank nodes)</label>
+              </div>
             <button id="submitButtonRML" type="button" class="btn btn-success">
                 <span id="convertToRMLText">Convert to RML</span>
             </button>
@@ -83,7 +83,7 @@
         </div>
         <hr>
     </div>
-    <footer class="container text-black-50">
+    <footer class="container-fluid text-black-50">
         <p class="float-right">Created by <a class="text-black-50" href="http://herminiogarcia.com">Herminio García</a></p>
         <!--<p>&copy; <a class="text-black-50" href="http://www.weso.es">WESO Research Group</a>, <a class="text-black-50" href="http://www.uniovi.es">University of Oviedo</a></p>-->
     </footer>

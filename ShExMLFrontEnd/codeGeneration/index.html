@@ -19,12 +19,22 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" href="../">Intro</a>
-                <a class="nav-item nav-link active">Map &amp; Merge</a>
-                <a class="nav-item nav-link" href="../spec">Spec</a>
+                <a class="nav-item nav-link" href="../editor">Map &amp; Merge</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Validation Generator
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="../validation/shex.html">ShEx</a>
+                        <a class="dropdown-item" href="../validation/shacl.html">SHACL</a>
+                    </div>
+                </li>
+                <a class="nav-item nav-link active">Code Generation</a>
+                <li><a class="nav-item nav-link" href="../spec">Spec</a></li>
             </div>
         </div>
     </nav>
-    <div id="mainContainer" class="container">
+    <div id="mainContainer" class="container-fluid">
         <div class="row">
             <div class="form-group col-12">
                 <label for="xsdURL">XML Schema: </label>
@@ -38,7 +48,7 @@
                 <button id="generateShExML" type="button" class="btn btn-success">
                     <span id="generateShExMLText">Generate ShExML</span>
                 </button>
-                <button id="loadingGenerateShExML" type="button" class="btn btn-primary" disabled>
+                <button id="loadingGenerateShExML" type="button" class="btn btn-success" disabled>
                     <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     <span id="loadingText">Loading...</span>
                 </button>
@@ -89,7 +99,7 @@
         </div>
         <hr>
     </div>
-    <footer class="container text-black-50">
+    <footer class="container-fluid text-black-50">
         <p class="float-right">Created by <a class="text-black-50" href="http://herminiogarcia.com">Herminio García</a></p>
         <!--<p>&copy; <a class="text-black-50" href="http://www.weso.es">WESO Research Group</a>, <a class="text-black-50" href="http://www.uniovi.es">University of Oviedo</a></p>-->
     </footer>

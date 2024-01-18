@@ -37,3 +37,8 @@ footer p {
     border: 1px solid #eee;
     height: 20em;
 }
+
+.container-fluid {
+    padding-left: 5%;
+    padding-right: 5%;
+}

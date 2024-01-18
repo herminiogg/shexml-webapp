@@ -113,7 +113,7 @@ $("#submitButton").click(function(){
 
 $("#submitButtonRML").click(function(){
     var shexmldocument = editor.getValue();
-    var useBlankNodes = $("#rmlBlankNodes").val();
+    var useBlankNodes = $("#rmlBlankNodes").is(":checked").toString();
     var content = {
         shexml: shexmldocument,
         format: $("#conversionFormat").val(),

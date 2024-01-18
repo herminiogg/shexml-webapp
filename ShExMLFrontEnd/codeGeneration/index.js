@@ -96,6 +96,7 @@ $('#generateShExML').click(function() {
         "contentType": "application/json",
         "success": function(data) {
             callForShExMLGeneration(content);
+            nonLoadingButtonGenerateShExML();
         },
         "error": function(jqXHR, textStatus, errorThrown) {
             createAlert("The given XML file does not validate against the given XML Schema");
@@ -114,11 +115,9 @@ function callForShExMLGeneration(content) {
         "contentType": "application/json",
         "success": function(data) {
             editor.setValue(data);
-            nonLoadingButtonGenerateShExML();
         },
         "error": function(jqXHR, textStatus, errorThrown) {
             createAlert(jqXHR.responseText);
-            nonLoadingButtonGenerateShExML();
         }
     });
 }
@@ -168,11 +167,11 @@ function nonLoadingButtonRML() {
 }
 
 function loadingButtonGenerateShExML() {
-    $("generateShExML").toggle();
-    $("loadingGenerateShExML").toggle();
+    $("#generateShExML").toggle();
+    $("#loadingGenerateShExML").toggle();
 }
 
 function nonLoadingButtonGenerateShExML() {
-    $("generateShExML").toggle();
-    $("loadingGenerateShExML").toggle();
+    $("#generateShExML").toggle();
+    $("#loadingGenerateShExML").toggle();
 }
