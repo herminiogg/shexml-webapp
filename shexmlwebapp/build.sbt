@@ -18,8 +18,8 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3" % "runtime",
   "org.eclipse.jetty" % "jetty-webapp" % "9.4.43.v20210629" % "container",
   "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
-  "com.herminiogarcia" %% "shexml" % "0.4.0" exclude("org.scala-lang.modules", "scala-parser-combinators_2.12"), // exclude("org.slf4j", "jcl-over-slf4j") exclude("org.slf4j", "slf4j-nop") exclude("javax.annotation", "javax.annotation-api") exclude("org.slf4j", "slf4j-api") exclude("ch.qos.logback", "logback-classic") exclude("com.typesafe.scala-logging", "scala-logging"),
-  "com.github.herminiogg" % "xmlschema2shex" % "a4d46de" exclude("com.github.herminiogg", "shexml") exclude("org.scala-lang.modules", "scala-parser-combinators_2.12"), // exclude("org.slf4j", "slf4j-api") exclude("ch.qos.logback", "logback-classic") exclude("com.typesafe.scala-logging", "scala-logging"),
+  "com.herminiogarcia" %% "shexml" % "0.4.2" exclude("io.gatling", "gatling-jsonpath"),
+  "com.herminiogarcia" %% "xmlschema2shex" % "0.1.0",
   "org.scalatra" %% "scalatra-json" % ScalatraVersion,
   "org.json4s"   %% "json4s-jackson" % "4.0.1",
 )

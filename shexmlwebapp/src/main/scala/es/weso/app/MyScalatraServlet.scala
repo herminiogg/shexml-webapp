@@ -3,7 +3,7 @@ package es.weso.app
 import java.net.URL
 
 import com.herminiogarcia.shexml.MappingLauncher
-import es.weso.xmlschema2shex.parser.XMLSchema2ShexParser
+import com.herminiogarcia.xmlschema2shex.parser.XMLSchema2ShexParser
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.SchemaFactory
 import org.json4s.{DefaultFormats, Formats}
@@ -40,10 +40,11 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
   }
 
   post("/generateRML") {
-    val content = parsedBody.extract[Content]
+    val content = parsedBody.extract[RMLContent]
     val mappingLauncher = new MappingLauncher()
-    //val prettify = Try(content.prettify.toString.toBoolean).getOrElse(false)
-    val result = Try(mappingLauncher.launchRMLTranslation(content.shexml))
+    val prettify = Try(content.prettify.toString.toBoolean).getOrElse(false)
+    println(prettify)
+    val result = Try(mappingLauncher.launchRMLTranslation(content.shexml, prettify))
     result match {
       case Success(r) => Ok(r)
       case Failure(error) => BadRequest(error.getMessage)
