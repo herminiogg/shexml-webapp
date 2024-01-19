@@ -89,9 +89,13 @@ if (urlParams.has("input")) {
 
 $("#submitButton").click(function(){
     var shexmldocument = editor.getValue();
+    var inferDatatypes = $("#datatypeInference").is(":checked").toString();
+    var normaliseURLs = $("#urlNormalisation").is(":checked").toString();
     var content = {
         shexml: shexmldocument,
-        format: $("#conversionFormat").val()
+        format: $("#conversionFormat").val(),
+        inferDatatypes: inferDatatypes,
+        normaliseURLs: normaliseURLs
     }
     $.ajax("https://shexml.herminiogarcia.com/api/generate", {
         "data": JSON.stringify(content),

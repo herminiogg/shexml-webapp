@@ -37,6 +37,14 @@
     </nav>
     <div id="mainContainer" class="container-fluid">
         <div class="row justify-content-end">
+            <div class="custom-control custom-switch" id="datatypeInferenceDiv">
+                <input type="checkbox" class="custom-control-input" id="datatypeInference" checked>
+                <label class="custom-control-label" for="datatypeInference">Infer datatypes</label>
+            </div>
+            <div class="custom-control custom-switch" id="urlNormalisationDiv">
+                <input type="checkbox" class="custom-control-input" id="urlNormalisation" checked>
+                <label class="custom-control-label" for="urlNormalisation">Normalise URIs</label>
+            </div>
             <select name="conversionFormat" id="conversionFormat" class="custom-select col-2">
                 <option value="Turtle">Turtle</option>
                 <option value="TriG">TriG</option>
@@ -91,8 +99,8 @@
         </div>
         <hr>
     </div>
-    <footer class="container text-black-50">
-        <p class="float-right">Created by <a class="text-black-50" href="http://herminiogarcia.com">Herminio García</a></p>
+    <footer class="container-fluid text-black-50">
+        <p class="float-right">Created by <a class="text-black-50" href="http://herminiogarcia.com">Herminio García González</a></p>
         <!--<p>&copy; <a class="text-black-50" href="http://www.weso.es">WESO Research Group</a>, <a class="text-black-50" href="http://www.uniovi.es">University of Oviedo</a></p>-->
     </footer>
 </body>

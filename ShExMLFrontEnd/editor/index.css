@@ -8,7 +8,7 @@
     margin-top: 15px;
 }
 
-#rmlBlankNodesDiv {
+#rmlBlankNodesDiv, #urlNormalisationDiv, #datatypeInferenceDiv {
     margin-right: 15px;
     margin-top: 22px;
 }

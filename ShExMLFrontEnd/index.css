@@ -1,8 +1,8 @@
-#mainContainer h2 {
+#content h2 {
     color: white;
 }
 
-#mainContainer p {
+#content p {
     color: white;
 }
 
@@ -11,7 +11,11 @@ body {
 }
 
 #content {
-    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
 }
 
 #subtitle {
@@ -24,5 +28,10 @@ body {
 }
 
 #mainContent {
-    padding-top: 5em;
+    padding-top: 10em;
+    padding-bottom: 2em;
+}
+
+nav {
+    z-index: 1;
 }

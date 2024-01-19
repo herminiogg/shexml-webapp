@@ -12,6 +12,11 @@
     padding-bottom: 20px;
 }
 
+#urlNormalisationDiv, #datatypeInferenceDiv {
+    margin-right: 15px;
+    margin-top: 22px;
+}
+
 footer p {
     padding-top: 10px;
     padding-bottom: 10px;
