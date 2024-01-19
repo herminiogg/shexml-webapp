@@ -27,7 +27,10 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
 
   post("/generate") {
     val content = parsedBody.extract[Content]
-    val mappingLauncher = new MappingLauncher()
+    val mappingLauncher = new MappingLauncher(
+      inferenceDatatype = Try(content.inferDatatypes.toString.toBoolean).getOrElse(false), 
+      normaliseURIs = Try(content.normaliseURLs.toString.toBoolean).getOrElse(false)
+    )
     if(content.shexml.contains("FUNCTIONS")) {
       BadRequest("Functions execution is not allowed in this playground due to security reasons")
     } else {
@@ -132,7 +135,7 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
 
 }
 
-case class Content(shexml: String, format: String)
+case class Content(shexml: String, format: String, inferDatatypes: String, normaliseURLs: String)
 case class RMLContent(shexml: String, format: String, prettify: String)
 case class ShExGeneration(shexml: String)
 case class SHACLGeneration(shexml: String, closed: Boolean)
