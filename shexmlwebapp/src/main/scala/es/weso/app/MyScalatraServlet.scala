@@ -101,7 +101,7 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
     val result = Try(XMLSchema2ShexParser().convertToShExML(xsd))
     result match {
       case Success(r) => {
-        val response = changeSource(r, xmlURL)
+        val response = if(xmlURL.nonEmpty) changeSource(r, xmlURL) else r
         Ok(response)
       }
       case Failure(error) => BadRequest(error.getMessage)

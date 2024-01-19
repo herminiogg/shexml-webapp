@@ -92,6 +92,15 @@ $('#generateShExML').click(function() {
         xml: xmlURL,
         xsd: xsdURL
     }
+    if(xmlURL.length === 0) {
+        callForShExMLGeneration(content);
+    } else {
+        validateXMLfile(content);
+    }
+    loadingButtonGenerateShExML();
+})
+
+function validateXMLfile(content) {
     $.ajax("https://shexml.herminiogarcia.com/api/validateXMLFile", {
         "data": JSON.stringify(content),
         "type": "POST",
@@ -100,15 +109,13 @@ $('#generateShExML').click(function() {
         "contentType": "application/json",
         "success": function(data) {
             callForShExMLGeneration(content);
-            nonLoadingButtonGenerateShExML();
         },
         "error": function(jqXHR, textStatus, errorThrown) {
             createAlert("The given XML file does not validate against the given XML Schema");
-            nonLoadingButtonGenerateShExML();
+            nonLoadingButtonGenerateShExML();       
         }
     });
-    loadingButtonGenerateShExML();
-})
+}
 
 function callForShExMLGeneration(content) {
     $.ajax("https://shexml.herminiogarcia.com/api/generateShexmlFromXSD", {
@@ -119,9 +126,11 @@ function callForShExMLGeneration(content) {
         "contentType": "application/json",
         "success": function(data) {
             editor.setValue(data);
+            nonLoadingButtonGenerateShExML();
         },
         "error": function(jqXHR, textStatus, errorThrown) {
             createAlert(jqXHR.responseText);
+            nonLoadingButtonGenerateShExML();
         }
     });
 }
