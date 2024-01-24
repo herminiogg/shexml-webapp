@@ -58,7 +58,7 @@ $("#submitButtonRML").click(function(){
     var content = {
         shexml: shexmldocument,
         format: $("#conversionFormat").val(),
-        prettify: false
+        prettify: "false"
     }
     $.ajax("https://shexml.herminiogarcia.com/api/generateRML", {
         "data": JSON.stringify(content),
