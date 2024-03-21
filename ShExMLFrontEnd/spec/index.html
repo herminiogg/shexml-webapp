@@ -16,7 +16,7 @@
           companyURL: "https://kazernedossin.eu/en/",
           mailto: "herminiogg@gmail.com"
         }],
-        edDraftURI: "http://shexml.herminiogarcia.com/spec",
+        edDraftURI: "https://shexml.herminiogarcia.com/spec",
         shortName: "shexml",
         localBiblio: {
             "SHEX": {
@@ -378,16 +378,38 @@ EXPRESSION exp &lt;file.it1.field2 UNION file.it2.field3&gt;
             <section>
                 <h2>Join</h2>
                 <p>
-                    Joins permit to extract identifiers information from other file when a common attribute is present. So, for example, if in file A there is an id and a name but
+                    Joins allow to merge the results of two iterators based in a common field. Therefore, if the field values are equal the two iterators results will be merged into a single one. 
+                    If the field to be merged exists in both iterators it will generate a list of all the combined results, if a field does not exist in one of the iterators it will only include the results
+                    from either the left or the right part containing them.
+                </p>
+                <aside class="example" title="Join example">
+                    <pre>
+ITERATOR it1 &lt;xpath: /path/to/entity&gt; {
+FIELD field1 &lt;@attribute1&gt;
+FIELD field2 &lt;field2&gt;
+FIELD field3 &lt;field3&gt;
+}
+ITERATOR it2 &lt;jsonpath: $.path.to.entity&gt; {
+FIELD field1 &lt;field1&gt;
+FIELD field3 &lt;field3&gt;
+}
+EXPRESSION exp &lt;file1.it1 JOIN file2.it2 ON file1.it1.field1 = file2.it2.field1&gt;
+                </pre>
+            </aside>
+            </section>
+            <section>
+                <h2>Substitution</h2>
+                <p>
+                    Substitutions permit to extract identifiers information from another file when a common attribute is present. So, for example, if in file A there is an id and a name but
                     in file B there is only a name, it is possible to substitute the result name for the corresponding id when there is a coincidence of names.
                 </p>
                 <section>
-                    <h2>Join over iterators</h2>
+                    <h2>Substitution over iterators</h2>
                     <p>
-                        Join can be used over iterators when this operation is wanted to be applied over all fields of the iterator. In this case, the operation
+                        A substitution can be used over iterators when this operation is wanted to be applied over all fields of the iterator. In this case, the operation
                         will work as with fields but taking into account the equality on field naming.
                     </p>
-                    <aside class="example" title="Join over iterators example">
+                    <aside class="example" title="Substitution over iterators example">
                             <pre>
 ITERATOR it1 &lt;xpath: /path/to/entity&gt; {
     FIELD field1 &lt;@attribute1&gt;
@@ -401,18 +423,18 @@ ITERATOR it3 &lt;jsonpath: $.path.to.entity&gt; {
     FIELD field1 &lt;field1&gt;
     FIELD field4 &lt;field3&gt;
 }
-EXPRESSION exp &lt;file.it1 UNION file.it2 JOIN file.it3&gt;
+EXPRESSION exp &lt;file.it1 UNION file.it2 SUBSTITUTING file.it3&gt;
                         </pre>
                     </aside>
                 </section>
                 <section>
-                    <h2>Join over fields</h2>
+                    <h2>Substitution over fields</h2>
                     <p>
-                        Joins can be applied over fields like other expression operators. In this case we can define the results as A, B and C. Consequently, the syntax is
-                        A UNION B JOIN C where the results of B are replaced for the results of A when C is equal to B. In the example, this is done for substituting the names
+                        Substitutions can be applied over fields like other expression operators. In this case we can define the results as A, B and C. Consequently, the syntax is
+                        A UNION B SUBSTITUTING C where the results of B are replaced for the results of A when C is equal to B. In the example, this is done for substituting the names
                         of B for the ids of A when this is possible. 
                     </p>
-                    <aside class="example" title="Join over fields example">
+                    <aside class="example" title="Substitution over fields example">
                             <pre>
 ITERATOR it1 &lt;xpath: /path/to/entity&gt; {
     FIELD id &lt;@id&gt;
@@ -421,7 +443,7 @@ ITERATOR it1 &lt;xpath: /path/to/entity&gt; {
 ITERATOR it2 &lt;jsonpath: $.path.to.entity&gt; {
     FIELD name &lt;name&gt;
 }
-EXPRESSION exp &lt;file.it1.id UNION file.it2.name JOIN file.it1.name&gt;
+EXPRESSION exp &lt;file.it1.id UNION file.it2.name SUBSTITUTING file.it1.name&gt;
                         </pre>
                     </aside>
                 </section>
