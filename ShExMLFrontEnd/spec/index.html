@@ -792,5 +792,53 @@ FUNCTIONS helper &lt;scala: https://raw.githubusercontent.com/herminiogg/ShExML/
             </aside>
         </section>
     </section>
+    <section>
+        <h2>Other instructions</h2>
+        <section>
+            <h2>Import</h2>
+            <p>
+                It is possible to import part of a ShExML script from external files, for that the IMPORT keyword can be used as shown in the example below and at any point in the code. 
+                The imports are executed before the script is processed, so if the results of combining the main ShExML script with the external parts does not provide a compliant ShExML script
+                the processor will detect it and return the consequent errors.
+            </p>
+            <aside class="example" title="Import example">
+                <pre>
+                    PREFIX : &lt;http://example.com/&gt;
+                    SOURCE films_xml_file &lt;https://rawgit.com/herminiogg/ShExML/master/src/test/resources/films.xml&gt;
+                    SOURCE films_json_file &lt;https://rawgit.com/herminiogg/ShExML/master/src/test/resources/films.json&gt;
+                    IMPORT &lt;iterators.shexml&gt;
+                    EXPRESSION films &lt;films_xml_file.film_xml UNION films_json_file.film_json&gt;
+                    
+                    IMPORT &lt;filmShape.shexml&gt;
+                </pre>
+            </aside>
+            <aside class="example" title="Iterators extract for the import as iterators.shexml">
+                <pre>
+                    ITERATOR film_xml &lt;xpath: //film&gt; {
+                        FIELD id &lt;@id&gt;
+                        FIELD name &lt;name&gt;
+                        FIELD year &lt;year&gt;
+                        FIELD country &lt;country&gt;
+                        FIELD directors &lt;directors/director&gt;
+                    }
+                    ITERATOR film_json &lt;jsonpath: $.films[*]&gt; {
+                        FIELD id &lt;id&gt;
+                        FIELD name &lt;name&gt;
+                        FIELD year &lt;year&gt;
+                        FIELD country &lt;country&gt;
+                        FIELD directors &lt;director&gt;
+                    }
+                </pre>
+            </aside>
+            <aside class="example" title="Shapes extract for the import as filmShape.shexml">
+                <pre>                
+                    :Films :[films.id] {
+                        :name [films.name] ;
+                        :year [films.year] ;
+                        :country [films.country] ;
+                        :director [films.directors] ;
+                    }
+                </pre>
+            </aside>
   </body>
 </html>
