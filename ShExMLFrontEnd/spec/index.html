@@ -756,6 +756,22 @@ FUNCTIONS helper &lt;scala: https://raw.githubusercontent.com/herminiogg/ShExML/
     }
                     </pre>
                 </aside>
+                <section>
+                    <h3>Built-in functions</h2>
+                    <p>These functions as their name indicates are integrated in the engine and can be called without the need to define them beforehand. 
+                        Their intention is to cover functionality not reachable (or too complicated) through the query languages nor by the external functions. 
+                        As an example, getting the iteration index of a certain item within an iteration context could result in very complicated external functions which makes
+                        it a perfect candidate for integration within the engine default functionality. For the moment only the index function is available, but it is expected to 
+                        include more functions under this mechanism in the future.
+                    </p>
+                    <aside class="example" title="Builtin functions example">
+                        <pre>
+    :Films :[films.id] {
+        :nameIterationIndex [films.name.index()] ; # returns the index of the current name item in the iteration context, i.e., 0, 1, 2, ...
+    }
+                        </pre>
+                    </aside>
+                </section>
             </section>
             <section>
                 <h2>Conditional statement generation</h2>

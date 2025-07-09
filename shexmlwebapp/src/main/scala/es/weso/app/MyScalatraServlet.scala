@@ -6,7 +6,8 @@ import com.herminiogarcia.shexml.MappingLauncher
 import com.herminiogarcia.xmlschema2shex.parser.XMLSchema2ShexParser
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.SchemaFactory
-import org.json4s.{DefaultFormats, Formats}
+//import org.json4s.{DefaultFormats, Formats}
+import org.json4s._
 import org.scalatra._
 import org.scalatra.json._
 
