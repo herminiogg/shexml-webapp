@@ -14,8 +14,9 @@ lazy val shexmlwebapp = (project in file("."))
       "jakarta.servlet" % "jakarta.servlet-api" % "6.0.0" % "provided",
       "org.scalatra" %% "scalatra-json-jakarta" % ScalatraVersion,
       "org.json4s"   %% "json4s-jackson" % "4.0.6",
-      "com.herminiogarcia" %% "shexml" % "0.5.4",
-      "com.herminiogarcia" %% "xmlschema2shex" % "0.1.0"
+      "com.herminiogarcia" %% "shexml" % "0.6.1",
+      "com.herminiogarcia" %% "xmlschema2shex" % "0.1.0",
+      "com.herminiogarcia" %% "shexml-streaming" % "0.0.1"
     ),
   )
 

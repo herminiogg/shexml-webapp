@@ -1,18 +1,21 @@
 package es.weso.app
 
 import java.net.URL
-
 import com.herminiogarcia.shexml.MappingLauncher
+import com.herminiogarcia.shexml.streaming.StreamMappingLauncher
 import com.herminiogarcia.xmlschema2shex.parser.XMLSchema2ShexParser
+import monix.execution.Scheduler
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.SchemaFactory
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 //import org.json4s.{DefaultFormats, Formats}
 import org.json4s._
 import org.scalatra._
 import org.scalatra.json._
-
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
+import monix.execution.Scheduler.Implicits.global
 
 class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJsonSupport {
 
@@ -32,7 +35,7 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
       inferenceDatatype = Try(content.inferDatatypes.toString.toBoolean).getOrElse(false), 
       normaliseURIs = Try(content.normaliseURLs.toString.toBoolean).getOrElse(false)
     )
-    if(content.shexml.contains("FUNCTIONS")) {
+    if(shexmlContainsFunctions(content.shexml)) {
       BadRequest("Functions execution is not allowed in this playground due to security reasons")
     } else {
       val result = Try(mappingLauncher.launchMapping(content.shexml, content.format))
@@ -109,6 +112,34 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
     }
   }
 
+  post("/streaming") {
+    val content = parsedBody.extract[Content]
+    response.setContentType("text/event-stream")
+    response.setStatus(200)
+    response.setHeader("Cache-Control", "no-cache")
+    response.setHeader("Connection", "keep-alive")
+    val writer = response.getWriter
+    val mappingLauncher = new StreamMappingLauncher(
+      inferenceDatatype = Try(content.inferDatatypes.toString.toBoolean).getOrElse(false),
+      normaliseURIs = Try(content.normaliseURLs.toString.toBoolean).getOrElse(false)
+    )
+    if(shexmlContainsFunctions(content.shexml)) {
+      BadRequest("Functions execution is not allowed in this playground due to security reasons")
+    } else {
+      val result = mappingLauncher.launchMapping(content.shexml, content.format)
+      val future = result.flatMap(_.foreachL(e => {
+        e.lines().forEach(l => {
+          writer.write(s"data: $l\n")
+          writer.flush()
+        })
+        writer.write("\n")
+        writer.flush()
+      })).runToFuture
+      Await.ready(future, Duration.Inf)
+      writer.close()
+    }
+  }
+
   private def validateXMLFile(xml: String, xsd: String): Try[Unit] = {
     val schemaLang = "http://www.w3.org/2001/XMLSchema"
     val schemaFactory = SchemaFactory.newInstance(schemaLang)
@@ -132,6 +163,10 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
     } finally {
       source.close()
     }
+  }
+
+  private def shexmlContainsFunctions(shexml: String): Boolean = {
+    "[Ff][Uu][Nn][Cc][Tt][Ii][Oo][Nn][Ss]".r.findFirstIn(shexml).isDefined
   }
 
 }

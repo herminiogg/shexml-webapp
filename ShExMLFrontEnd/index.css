@@ -35,3 +35,7 @@ body {
 nav {
     z-index: 1;
 }
+
+p#subtitle a {
+    text-decoration: underline;
+}
