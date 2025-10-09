@@ -9,7 +9,7 @@ app = Flask(__name__)
 @app.route('/sse/<number_of_events>')
 def sse_handler(number_of_events):
   def event_stream():
-    for i in range(1, int(number_of_events)):
+    for i in range(1, int(number_of_events) + 1):
       print(f"Sending event {i}")
       event = f"""event: create
 id: {i}
