@@ -125,7 +125,7 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
     )
     if(shexmlContainsFunctions(content.shexml)) {
       BadRequest("Functions execution is not allowed in this playground due to security reasons")
-    } else {
+    } else Try {
       val result = mappingLauncher.launchMapping(content.shexml, content.format)
       val future = result.flatMap(_.foreachL(e => {
         e.lines().forEach(l => {
@@ -137,7 +137,7 @@ class MyScalatraServlet extends ScalatraServlet with CorsSupport with JacksonJso
       })).runToFuture
       Await.ready(future, Duration.Inf)
       writer.close()
-    }
+    }.getOrElse(e => InternalServerError(e))
   }
 
   private def validateXMLFile(xml: String, xsd: String): Try[Unit] = {

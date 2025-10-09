@@ -5,7 +5,7 @@ var editor = YASHEML(document.querySelector("#editor"), {
     viewportMargin: Infinity
 })
 var filmsShExML = `PREFIX : <http://example.com/>
-STREAM events_stream <https://postman-echo.com/server-events/10>
+STREAM events_stream <https://shexml.herminiogarcia.com/sse/10>
 ITERATOR event <csvPerRow> {
   FIELD id <id>
   FIELD event_type <event>
